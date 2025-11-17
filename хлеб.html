@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хлебный Дождь от Андрея: Рогалик - Это ХЛЕЕЕБ!</title>
+    <style>
+        body {
+            overflow: hidden; /* Скрываем прокрутку, чтобы объекты падали за экран */
+            margin: 0;
+            background-color: #34495e; /* Темно-синий, как облачное небо */
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Для веселого настроения */
+            color: #ecf0f1;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .falling-item {
+            position: absolute;
+            animation: fall linear infinite;
+            white-space: nowrap; /* Чтобы текст не переносился */
+            transform-origin: center center; /* Точка вращения */
+            opacity: 0; /* Изначально невидимый */
+            font-size: 2em; /* Крупнее, чтобы было видно */
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none; /* Чтобы нельзя было нажать на падающие элементы */
+        }
+
+        /* Анимация падения и вращения */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1; /* Появляется */
+            }
+            90% {
+                opacity: 1; /* Виден почти до конца */
+            }
+            100% {
+                transform: translateY(120vh) rotate(720deg); /* Падает вниз и крутится */
+                opacity: 0; /* Исчезает внизу */
+            }
+        }
+
+        /* Разные задержки для элементов, чтобы они падали не одновременно */
+        .delay-1 { animation-delay: 0s; }
+        .delay-2 { animation-delay: 2s; }
+        .delay-3 { animation-delay: 4s; }
+        .delay-4 { animation-delay: 6s; }
+        .delay-5 { animation-delay: 8s; }
+        .delay-6 { animation-delay: 10s; }
+        .delay-7 { animation-delay: 12s; }
+        .delay-8 { animation-delay: 14s; }
+        .delay-9 { animation-delay: 16s; }
+        .delay-10 { animation-delay: 18s; }
+
+        /* Стиль для хлебных элементов */
+        .bread-item {
+            color: #f7dc6f; /* Золотистый цвет хлеба */
+        }
+
+        /* Стиль для имени "Андрей" */
+        .andrey-item {
+            color: #d35400; /* Оранжевый/коричневый для имени */
+        }
+
+        /* Стиль для надписи "Рогалик - это хлеееб" */
+        .rogaliq-item {
+            color: #c0392b; /* Красный, привлекающий внимание */
+            font-size: 2.5em; /* Больше, чтобы выделить */
+            font-style: italic;
+        }
+
+        /* Центрирование главного заголовка */
+        .main-title {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 3em;
+            color: #ecf0f1;
+            z-index: 1000; /* Поверх падающих элементов */
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.7);
+        }
+
+        /* Добавление случайных позиций для каждого элемента с помощью JavaScript */
+    </style>
+</head>
+<body>
+
+    <h1 class="main-title">☔ Хлебный Дождь от Андрея ☔</h1>
+
+    <script>
+        const items = [
+            '🍞', '🥖', '🥐', '🥨', '🥯', '🍞', '🥖', '🥐', '🥨', '🥯',
+            'Андрей', 'Андрей', 'Андрей', 'Андрей',
+            'Рогалик - это ХЛЕЕЕБ!', 'Рогалик - это ХЛЕЕЕБ!', 'Рогалик - это ХЛЕЕЕБ!'
+        ];
+
+        const body = document.body;
+        const animationDuration = 20; // Продолжительность анимации в секундах
+
+        function createFallingItem() {
+            const item = document.createElement('div');
+            item.classList.add('falling-item');
+
+            const randomIndex = Math.floor(Math.random() * items.length);
+            item.textContent = items[randomIndex];
+
+            // Добавляем класс для цвета
+            if (item.textContent.includes('🍞') || item.textContent.includes('🥖') || item.textContent.includes('🥐') || item.textContent.includes('🥨') || item.textContent.includes('🥯')) {
+                item.classList.add('bread-item');
+                item.textContent = items[randomIndex]; // Для эмодзи
+            } else if (item.textContent.includes('Андрей')) {
+                item.classList.add('andrey-item');
+            } else {
+                item.classList.add('rogaliq-item');
+            }
+
+            // Случайная горизонтальная позиция
+            item.style.left = Math.random() * 95 + 'vw';
+            // Случайная длительность анимации (чтобы не все падали с одинаковой скоростью)
+            item.style.animationDuration = (Math.random() * 5 + animationDuration) + 's';
+            // Случайная задержка анимации (чтобы они появлялись постепенно)
+            item.style.animationDelay = Math.random() * animationDuration + 's';
+
+            // Случайный размер
+            item.style.fontSize = (Math.random() * 1.5 + 1.5) + 'em'; // От 1.5 до 3em
+
+            body.appendChild(item);
+
+            // Удаляем элемент после завершения анимации, чтобы не перегружать DOM
+            item.addEventListener('animationend', () => {
+                item.remove();
+                createFallingItem(); // Создаем новый, чтобы дождь был бесконечным
+            });
+        }
+
+        // Создаем несколько элементов для начала
+        for (let i = 0; i < 30; i++) { // Количество элементов, которые будут одновременно на экране
+            createFallingItem();
+        }
+    </script>
+
+</body>
+</html>
